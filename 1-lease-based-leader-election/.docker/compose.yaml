@@ -1,0 +1,59 @@
+name: 1-lease-based-leader-election
+
+services:
+  redis:
+    image: redis:7-alpine
+    container_name: 1-lease-based-leader-election-redis
+    networks:
+      - 1-lease-based-leader-election-network
+
+  api-1:
+    container_name: 1-lease-based-leader-election-api-1
+    image: starciacademy/system-design-1-lease-based-leader-election-api:latest
+    build:
+      context: ../leader-election-service
+      dockerfile: Dockerfile
+    ports:
+      - "3026:3000"
+    environment:
+      - PORT=3000
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    depends_on:
+      - redis
+    networks:
+      - 1-lease-based-leader-election-network
+
+  api-2:
+    container_name: 1-lease-based-leader-election-api-2
+    image: starciacademy/system-design-1-lease-based-leader-election-api:latest
+    ports:
+      - "3027:3000"
+    environment:
+      - PORT=3000
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    depends_on:
+      - redis
+      - api-1
+    networks:
+      - 1-lease-based-leader-election-network
+
+  api-3:
+    container_name: 1-lease-based-leader-election-api-3
+    image: starciacademy/system-design-1-lease-based-leader-election-api:latest
+    ports:
+      - "3028:3000"
+    environment:
+      - PORT=3000
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    depends_on:
+      - redis
+      - api-1
+    networks:
+      - 1-lease-based-leader-election-network
+
+networks:
+  1-lease-based-leader-election-network:
+    name: 1-lease-based-leader-election-network

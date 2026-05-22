@@ -1,0 +1,45 @@
+name: 0-redlock-and-fencing-tokens
+
+services:
+  redis-1:
+    image: redis:7-alpine
+    container_name: 0-redlock-and-fencing-tokens-redis-1
+    command: redis-server --port 6379 --appendonly no
+    networks:
+      - 0-redlock-and-fencing-tokens-network
+
+  redis-2:
+    image: redis:7-alpine
+    container_name: 0-redlock-and-fencing-tokens-redis-2
+    command: redis-server --port 6379 --appendonly no
+    networks:
+      - 0-redlock-and-fencing-tokens-network
+
+  redis-3:
+    image: redis:7-alpine
+    container_name: 0-redlock-and-fencing-tokens-redis-3
+    command: redis-server --port 6379 --appendonly no
+    networks:
+      - 0-redlock-and-fencing-tokens-network
+
+  api:
+    container_name: 0-redlock-and-fencing-tokens-api
+    image: starciacademy/system-design-0-redlock-and-fencing-tokens-api:latest
+    build:
+      context: ../redlock-service
+      dockerfile: Dockerfile
+    ports:
+      - "3025:3000"
+    environment:
+      - PORT=3000
+      - REDIS_NODES=redis-1:6379,redis-2:6379,redis-3:6379
+    depends_on:
+      - redis-1
+      - redis-2
+      - redis-3
+    networks:
+      - 0-redlock-and-fencing-tokens-network
+
+networks:
+  0-redlock-and-fencing-tokens-network:
+    name: 0-redlock-and-fencing-tokens-network
