@@ -18,11 +18,8 @@ services:
   api:
     container_name: 2-etcd-strong-consensus-api
     image: starciacademy/system-design-2-etcd-strong-consensus-api:latest
-    build:
-      context: ../etcd-coordination-service
-      dockerfile: Dockerfile
     ports:
-      - "3029:3000"
+      - "3000:3000"
     environment:
       - PORT=3000
       - ETCD_HOSTS=etcd:2379

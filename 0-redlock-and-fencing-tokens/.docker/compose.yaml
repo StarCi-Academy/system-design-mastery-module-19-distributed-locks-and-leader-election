@@ -25,11 +25,8 @@ services:
   api:
     container_name: 0-redlock-and-fencing-tokens-api
     image: starciacademy/system-design-0-redlock-and-fencing-tokens-api:latest
-    build:
-      context: ../redlock-service
-      dockerfile: Dockerfile
     ports:
-      - "3025:3000"
+      - "3000:3000"
     environment:
       - PORT=3000
       - REDIS_NODES=redis-1:6379,redis-2:6379,redis-3:6379

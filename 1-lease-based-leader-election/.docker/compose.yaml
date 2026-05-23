@@ -10,9 +10,6 @@ services:
   api-1:
     container_name: 1-lease-based-leader-election-api-1
     image: starciacademy/system-design-1-lease-based-leader-election-api:latest
-    build:
-      context: ../leader-election-service
-      dockerfile: Dockerfile
     ports:
       - "3026:3000"
     environment:
